@@ -1,6 +1,6 @@
 {
-  "name": "Ana Panel",
-  "short_name": "Ana Panel",
+  "name": "Smart Home",
+  "short_name": "Smart Home",
   "description": "Akıllı ev paneli",
   "start_url": "./",
   "scope": "./",

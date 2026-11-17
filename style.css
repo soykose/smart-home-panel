@@ -104,6 +104,21 @@ header h1 {
   gap: 14px
 }
 
+/* Yalnız web sürümünde ana panelin altında görünen silik etiket */
+.web-note {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--text-dim);
+  opacity: .45;
+  pointer-events: none;
+  user-select: none
+}
+
 .dash-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

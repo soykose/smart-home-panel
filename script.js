@@ -37,6 +37,41 @@ const ESP32_IP = 'http://192.168.1.100',
   }
 };
 
+// Web sürümü geri tuşu: uygulamada geri tuşunu MainActivity yönetir (handleBack); tarayıcıda sayfa
+// derinliğine göre geçmiş (history) kaydı tutulur. Ana panelde geri = çıkış. Uygulamada (Android köprüsü varsa) hiçbir şey yapmaz.
+const PAGE_DEPTH = { dash: 0, lights: 1, water: 1, feeder: 1, config: 1, 'vcfg-0': 2, 'vcfg-1': 2, 'feeder-config': 2 };
+let histDepth = 0, histIgnore = false, histFromPop = false;
+
+function histSync(page) {
+  if (window.Android || histFromPop) return;
+  const d = PAGE_DEPTH[page] || 0;
+  try {
+    if (d > histDepth) { for (let i = histDepth + 1; i <= d; i++) history.pushState({ d: i }, ''); }
+    else if (d < histDepth) { histIgnore = true; setTimeout(() => { histIgnore = false; }, 500); history.go(d - histDepth); }
+    else history.replaceState({ d }, '');
+    histDepth = d;
+  } catch (e) {}
+}
+
+if (!window.Android) {
+  try { history.replaceState({ d: 0 }, ''); } catch (e) {}
+  window.addEventListener('popstate', ev => {
+    if (histIgnore) { histIgnore = false; return; }
+    const cur = document.querySelector('.page.active');
+    let id = cur ? cur.id.replace('page-', '') : 'dash';
+    const curD = PAGE_DEPTH[id] || 0;
+    const newD = (ev.state && ev.state.d) || 0;
+    histDepth = newD;
+    if (newD < curD) {
+      while ((PAGE_DEPTH[id] || 0) > newD) id = PAGE_PARENT[id] || 'dash';
+      histFromPop = true; showPage(id); histFromPop = false;
+    } else if (newD > curD) {
+      histDepth = curD;
+      try { history.replaceState({ d: curD }, ''); } catch (e) {}
+    }
+  });
+}
+
 function showPage(e) {
   document.querySelectorAll('.page').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + e).classList.add('active');
@@ -58,6 +93,7 @@ function showPage(e) {
     fetchFeederStatus();
     fetchFeederConfig();
   }
+  histSync(e);
 }
 
 // Android geri tuşu: alt panelde bir üst panele dön, ana panelde false döndür (uygulama kapanır)
