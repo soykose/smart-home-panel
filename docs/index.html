@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Smart Home</title>
+    <meta name="theme-color" content="#0f1117">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Smart Home">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1 id="header-title">🏠 Ana Panel</h1>
+    <button type="button" class="header-time" id="header-time" aria-label="Bağlantı durumu ve yapılandırma">
+        <svg class="conn-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span id="header-time-text"></span>
+    </button>
+</header>
+<div class="page active" id="page-dash">
+    <div class="dash-grid">
+        <div class="dash-btn" onclick="showPage('lights')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <div class="dash-btn-label">Aydınlatma</div>
+            <div class="dash-mini-indicators" id="mini-lights"></div>
+        </div>
+        <div class="dash-btn" onclick="showPage('water')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6 9 4 13 4 16a8 8 0 0 0 16 0c0-3-2-7-8-14z" />
+            </svg>
+            <div class="dash-btn-label">Sulama</div>
+            <div class="dash-mini-indicators" id="mini-water"></div>
+        </div>
+        <div class="dash-btn" onclick="showPage('feeder')">
+            <div id="feeder-sleep-badge" class="sleep-badge" style="display:none;">💤 Uykuda</div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="7" />
+                <path d="M5.5 8.5v-6l3 3zm13 0v-6l-3 3zM2 13l9 1m-9.5 1.5L11 14m11-1-9 1m9.5 1.5L13 14" />
+                <circle cx="9.5" cy="11" r=".5" fill="#fff" stroke="none" />
+                <circle cx="14.5" cy="11" r=".5" fill="#fff" stroke="none" />
+            </svg>
+            <div class="dash-btn-label">Mama Kabı</div>
+            <div class="feeder-mini">
+                <div class="mini-item">
+                    <div class="mini-label">Pil</div>
+                    <svg class="mini-bat-svg" viewBox="0 0 30 14">
+                        <rect x="1" y="2" width="24" height="10" rx="2" fill="none"
+                              stroke="#2a2d3a" stroke-width="1.5" />
+                        <rect x="26" y="5" width="3" height="4" rx="1" fill="#2a2d3a" />
+                        <rect id="mini-bat-fill" x="2.5" y="3.5" width="21" height="7"
+                              rx="1.5" fill="#3dba74" />
+                    </svg>
+                    <div class="mini-val" id="mini-bat-pct">–%</div>
+                </div>
+                <div class="mini-item">
+                    <div class="mini-label">Mama</div>
+                    <div class="mini-bar-wrap">
+                        <div class="mini-bar-fill" id="mini-food-fill" style="width:0%;background:var(--good)">
+                        </div>
+                    </div>
+                    <div class="mini-val" id="mini-food-pct">–%</div>
+                </div>
+            </div>
+        </div>
+        <div class="dash-btn" onclick="openCamera()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 7l-7 5 7 5V7z" />
+                <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+            <div class="dash-btn-label">Kameralar</div>
+        </div>
+    </div>
+    <div class="web-note">web sürüm</div>
+</div>
+<div class="page" id="page-lights">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('dash')">← Geri</button>
+        <div class="back-page">Ana Panel</div>
+    </div>
+    <div class="lights-grid">
+        <button class="light-btn" id="light-0" onclick="toggleLight(0)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" />
+            </svg>
+            Bahçe Led
+        </button>
+        <button class="light-btn" id="light-1" onclick="toggleLight(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 4 12.9V17H8v-2.1A7 7 0 0 1 12 2z" />
+            </svg>
+            Havuz Led
+        </button>
+    </div>
+</div>
+<div class="page" id="page-water">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('dash')">← Geri</button>
+        <div class="back-page">Ana Panel</div>
+    </div>
+    <div class="section-label">Vana 1</div>
+    <div class="btn-row">
+        <button class="btn btn-primary" id="v1-manual" onclick="toggleValveManual(0)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6 9 4 13 4 16a8 8 0 0 0 16 0c0-3-2-7-8-14z" />
+            </svg>
+            Manuel
+            <div class="btn-status" id="v1-manual-status">KAPALI</div>
+        </button>
+        <button class="btn btn-secondary" id="v1-auto">
+            <div class="lp-fill"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15 15" />
+            </svg>
+            Otomasyon
+            <div class="btn-status" id="v1-auto-status">KAPALI</div>
+        </button>
+    </div>
+    <div class="section-label">Vana 2</div>
+    <div class="btn-row">
+        <button class="btn btn-primary" id="v2-manual" onclick="toggleValveManual(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6 9 4 13 4 16a8 8 0 0 0 16 0c0-3-2-7-8-14z" />
+            </svg>
+            Manuel
+            <div class="btn-status" id="v2-manual-status">KAPALI</div>
+        </button>
+        <button class="btn btn-secondary" id="v2-auto">
+            <div class="lp-fill"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15 15" />
+            </svg>
+            Otomasyon
+            <div class="btn-status" id="v2-auto-status">KAPALI</div>
+        </button>
+    </div>
+    <div class="section-label">Havuz Motoru</div>
+    <div class="btn-pool" id="btn-pool">
+        <div class="lp-fill"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+        </svg>
+        <div>
+            <div style="font-size:14px;font-weight:600">Havuz Motoru</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:2px"
+                 id="pool-status">KAPALI — basılı tutarak aç/kapat</div>
+        </div>
+    </div>
+</div>
+<div class="page" id="page-vcfg-0">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('water')">← Geri</button>
+        <div class="back-page">Sulama</div>
+    </div>
+    <div class="section-label">Sulama Zamanları</div>
+    <div id="vcfg-slots-0"></div>
+    <div class="section-label">Otomasyon</div>
+    <div class="auto-master">
+        <div>
+            <div class="auto-master-label">Otomatik Sulama — Vana 1</div>
+            <div class="auto-master-sub">Aktifken tanımlı saatlerde sulama yapar</div>
+        </div>
+        <label class="toggle">
+            <input type="checkbox" id="vcfg-auto-0">
+            <div class="toggle-track"></div>
+        </label>
+    </div>
+    <div class="conflict-box" id="conflict-0"></div>
+    <div class="section-label">Manuel Açık Unutma Emniyeti</div>
+    <div class="field-row">
+        <div>
+            <div class="field-row-label">Zaman Aşımı</div>
+            <div class="field-row-sub">Manuel açıkken otomatik kapanma</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="v0-timeout" min="1" max="120" value="30" style="width:56px">
+            <span style="font-size:11px;color:var(--text-dim)">dk</span>
+        </div>
+    </div>
+    <button class="save-btn" onclick="saveValveCfg(0)">Kaydet</button>
+</div>
+<div class="page" id="page-vcfg-1">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('water')">← Geri</button>
+        <div class="back-page">Sulama</div>
+    </div>
+    <div class="section-label">Sulama Zamanları</div>
+    <div id="vcfg-slots-1"></div>
+    <div class="section-label">Otomasyon</div>
+    <div class="auto-master">
+        <div>
+            <div class="auto-master-label">Otomatik Sulama — Vana 2</div>
+            <div class="auto-master-sub">Aktifken tanımlı saatlerde sulama yapar
+            </div>
+        </div>
+        <label class="toggle">
+            <input type="checkbox" id="vcfg-auto-1">
+            <div class="toggle-track"></div>
+        </label>
+    </div>
+    <div class="conflict-box" id="conflict-1"></div>
+    <div class="section-label">Manuel Açık Unutma Emniyeti</div>
+    <div class="field-row">
+        <div>
+            <div class="field-row-label">Zaman Aşımı</div>
+            <div class="field-row-sub">Manuel açıkken otomatik kapanma</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="v1-timeout" min="1" max="120" value="30" style="width:56px">
+            <span style="font-size:11px;color:var(--text-dim)">dk</span>
+        </div>
+    </div>
+    <button class="save-btn" onclick="saveValveCfg(1)">Kaydet</button>
+</div>
+<div class="page" id="page-feeder">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('dash')">← Geri</button>
+        <div class="back-page">Ana Panel</div>
+        <div id="feeder-page-sleep-badge" class="sleep-badge-page" style="display:none;">💤 Cihaz Uykuda</div>
+    </div>
+    <div class="gauges">
+        <div class="gauge-card">
+            <div class="gauge-label">Pil</div>
+            <svg class="battery-icon" viewBox="0 0 56 28" id="battery-svg">
+                <rect x="1" y="4" width="48" height="20" rx="4" fill="none" stroke="#2a2d3a" stroke-width="2" />
+                <rect x="50" y="10" width="5" height="8" rx="2" fill="#2a2d3a" />
+                <rect id="bat-fill" x="3" y="6" width="44" height="16" rx="3" fill="#3dba74" />
+            </svg>
+            <div class="gauge-pct" id="bat-pct">–<span>%</span></div>
+        </div>
+        <div class="gauge-card">
+            <div class="gauge-label">Mama</div>
+            <div class="bar-wrap">
+                <div class="bar-fill" id="food-fill" style="height:0%;background:var(--good)"></div>
+            </div>
+            <div class="gauge-pct" id="food-pct">–<span>%</span></div>
+        </div>
+    </div>
+    <div class="feed-buttons">
+        <button class="btn btn-feed" id="btn-feed" onclick="triggerFeed()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v6M8 6l4-4 4 4" />
+                <rect x="4" y="8" width="16" height="13" rx="3" />
+                <line x1="9" y1="14" x2="15" y2="14" />
+            </svg>
+            Manuel Yemle
+        </button>
+        <button class="btn btn-auto-feed" id="btn-auto-feed">
+            <div class="long-press-fill" id="lp-fill-feed"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15 15" />
+            </svg>
+            Otomasyon
+            <div class="auto-status" id="feed-auto-status">KAPALI</div>
+        </button>
+    </div>
+    <div class="info-bar">
+        Sonraki öğün: <b id="next-meal">–</b>
+    </div>
+</div>
+<div class="page" id="page-feeder-config">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('feeder')">← Geri</button>
+        <div class="back-page">Mama Kabı</div>
+        <div class="info-bar">
+            Cihaz saati: <b id="feeder-cfg-time">–</b>
+        </div>
+    </div>
+    <div class="section-label">Öğün Saatleri</div>
+    <div id="feed-slots-container"></div>
+    <div class="section-label">Otomasyon</div>
+    <div class="auto-master">
+        <div>
+            <div class="auto-master-label">Otomatik Yemleme</div>
+            <div class="auto-master-sub">Aktifken tanımlı saatlerde yemler</div>
+        </div>
+        <label class="toggle">
+            <input type="checkbox" id="cfg-auto-toggle">
+            <div class="toggle-track"></div>
+        </label>
+    </div>
+
+    <!-- YENİ: Uyku Modu Bloğu -->
+    <div class="section-label">Uyku Modu (Güç Tasarrufu)</div>
+    <div class="field-row">
+        <div>
+            <div class="field-row-label">Uyku Aralığı</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="slp-sh" min="0" max="23" value="23" style="width:52px">
+            <span class="slot-sep2">:</span>
+            <input type="number" id="slp-sm" min="0" max="59" value="00" style="width:52px">
+            <span style="font-size:12px;color:var(--text-dim);margin:0 4px">-</span>
+            <input type="number" id="slp-eh" min="0" max="23" value="06" style="width:52px">
+            <span class="slot-sep2">:</span>
+            <input type="number" id="slp-em" min="0" max="59" value="00" style="width:52px">
+        </div>
+    </div>
+    <div class="auto-master" style="margin-top: 10px;">
+        <div>
+            <div class="auto-master-label">Uyku Modunu Etkinleştir</div>
+            <div class="auto-master-sub">Seçili saatler arası cihaz tepki vermez</div>
+        </div>
+        <label class="toggle">
+            <input type="checkbox" id="cfg-sleep-toggle">
+            <div class="toggle-track"></div>
+        </label>
+    </div>
+
+    <button class="save-btn" onclick="saveFeedConfig()">Kaydet</button>
+</div>
+<div class="page" id="page-config">
+    <div class="page-header">
+        <button class="back-btn" onclick="showPage('dash')">← Geri</button>
+        <div class="back-page">Ana Panel</div>
+    </div>
+    <div class="tabs" id="cfg-tabs">
+        <button class="tab-btn" data-tab="device" onclick="cfgTab('device')">Cihaz</button>
+        <button class="tab-btn active" data-tab="mqtt" onclick="cfgTab('mqtt')">MQTT</button>
+        <button class="tab-btn" data-tab="ws" onclick="cfgTab('ws')">WS</button>
+        <button class="tab-btn" data-tab="nvr" onclick="cfgTab('nvr')">NVR</button>
+    </div>
+    <div class="cfg-pane" id="cfg-pane-device">
+        <div class="cfg-note">ESP32'nin durumu ve günlüğü. Bu sekmeden ayar değiştirilemez; tek komut en alttaki yeniden başlatma butonudur.</div>
+        <div class="section-label">Cihaz durumu</div>
+        <pre class="cfg-diag" id="dev-status">Veri bekleniyor…</pre>
+        <div class="section-label">Günlük (log)</div>
+        <button class="save-btn neutral" id="dev-log-older" onclick="devLogOlder()">Daha eski kayıtlar</button>
+        <pre class="cfg-diag dev-log" id="dev-log">Yükleniyor…</pre>
+        <button class="save-btn neutral" onclick="devRefresh()">Yenile</button>
+        <div class="section-label">Cihazı yeniden başlat</div>
+        <button class="save-btn danger" id="dev-restart-btn" onclick="restartAsk()" disabled>ESP32'yi yeniden başlat</button>
+    </div>
+    <div class="cfg-pane active" id="cfg-pane-mqtt">
+        <div class="cfg-note">Uzaktan erişim için bulut MQTT sunucusu (WebSocket + TLS). Adres boş bırakılıp kaydedilirse MQTT kullanılmaz.</div>
+        <div class="cfg-field">
+            <label for="cfg-mqtt-url">Adres</label>
+            <input type="text" id="cfg-mqtt-url" placeholder="wss://sunucu:8084/mqtt" autocapitalize="off" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-mqtt-user">Kullanıcı adı</label>
+            <input type="text" id="cfg-mqtt-user" autocapitalize="off" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-mqtt-pass">Şifre</label>
+            <input type="password" id="cfg-mqtt-pass" autocomplete="off">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-mqtt-root">Topic kökü</label>
+            <input type="text" id="cfg-mqtt-root" placeholder="smarthome/panel" autocapitalize="off" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="save-btn" onclick="cfgSaveMqtt()">Kaydet</button>
+        <div class="section-label">Bağlantı durumu</div>
+        <pre class="cfg-diag" id="cfg-diag"></pre>
+    </div>
+    <div class="cfg-pane" id="cfg-pane-ws">
+        <div class="cfg-note cfg-lock-note" style="display:none">Web sürümünde yerel bağlantı kullanılamaz.</div>
+        <div class="cfg-note">Evdeki ESP32'ye doğrudan WebSocket bağlantısı. Adres boş bırakılıp kaydedilirse yerel bağlantı denenmez.</div>
+        <div class="cfg-field">
+            <label for="cfg-ws-ip">Adres</label>
+            <input type="text" id="cfg-ws-ip" placeholder="192.168.1.100" inputmode="decimal" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-ws-port">Port</label>
+            <input type="text" id="cfg-ws-port" placeholder="81" inputmode="numeric" autocomplete="off">
+        </div>
+        <button class="save-btn" onclick="cfgSaveWs()">Kaydet</button>
+    </div>
+    <div class="cfg-pane" id="cfg-pane-nvr">
+        <div class="cfg-note cfg-lock-note" style="display:none">Web sürümünde kamera erişilemiyor.</div>
+        <div class="cfg-note">Kameralar için NVR/DVR bilgileri. Kaydetmeden önce cihaza bağlanılıp sınanır.</div>
+        <div class="cfg-field">
+            <label for="cfg-nvr-name">Ad</label>
+            <input type="text" id="cfg-nvr-name" placeholder="NVR" autocomplete="off">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-nvr-ip">Adres</label>
+            <input type="text" id="cfg-nvr-ip" placeholder="192.168.1.64" inputmode="decimal" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-nvr-port">RTSP portu</label>
+            <input type="text" id="cfg-nvr-port" placeholder="554" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-nvr-user">Kullanıcı adı</label>
+            <input type="text" id="cfg-nvr-user" autocapitalize="off" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="cfg-field">
+            <label for="cfg-nvr-pass">Şifre</label>
+            <input type="password" id="cfg-nvr-pass" autocomplete="off">
+        </div>
+        <button class="save-btn" id="cfg-nvr-save" onclick="cfgSaveNvr()">Bağlan ve Kaydet</button>
+        <button class="save-btn secondary" id="cfg-nvr-delete" style="display:none" onclick="cfgDeleteNvr()">Kaydı Sil</button>
+    </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="dlg-overlay" id="restart-dlg" hidden>
+    <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="restart-dlg-title">
+        <h3 id="restart-dlg-title">ESP32 yeniden başlatılsın mı?</h3>
+        <p>Bu işlem ana cihazı (ESP32) kapatıp tekrar açar. Bağlı yükler (aydınlatma, sulama, havuz motoru vb.) kapatılır.</p>
+        <p>Bu süre içinde cihaz birkaç dakika boyunca çevrim dışı görünecek.</p>
+        <div class="dlg-btns">
+            <button class="save-btn neutral" onclick="restartCancel()">Vazgeç</button>
+            <button class="save-btn danger" onclick="restartConfirm()">Yeniden başlat</button>
+        </div>
+    </div>
+</div>
+
+ <script src="config.js"></script>
+ <script src="transport.js"></script>
+ <script src="script.js"></script>
+</body>
+
+</html>

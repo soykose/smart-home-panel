@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Panel Kurulum</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>📡 Panel Kurulum</h2>
+  <div class="sub">Ağ, uzaktan erişim ve cihaz ayarları</div>
+
+  <!-- Durum -->
+  <div class="status-box">
+    <div class="status-row">
+      <span class="status-key">Reset Nedeni</span>
+      <span class="badge badge-warn" id="stReset">...</span>
+    </div>
+    <div class="status-row">
+      <span class="status-key">Wi-Fi</span>
+      <span class="badge badge-warn" id="stBadge">...</span>
+    </div>
+    <div class="status-row" id="stNetRow" style="display:none">
+      <span class="status-key">Ağ</span>
+      <span class="status-val" id="stNet">–</span>
+    </div>
+    <div class="status-row" id="stIpRow" style="display:none">
+      <span class="status-key">IP</span>
+      <span class="status-val" id="stIp">–</span>
+    </div>
+    <div class="status-row">
+      <span class="status-key">MQTT</span>
+      <span class="badge badge-warn" id="stMqtt">...</span>
+    </div>
+    <div class="status-detail" id="stMqttDetail" style="display:none"></div>
+    <div class="status-row">
+      <span class="status-key">Saat</span>
+      <span class="status-val" id="stTime">–</span>
+    </div>
+  </div>
+
+  <!-- Bölüm başlığı -->
+  <div class="banner">Bağlantı Yapılandırma</div>
+
+  <!-- Sekmeler -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="wifi" onclick="setTab('wifi')">Wi-Fi</button>
+    <button class="tab-btn" data-tab="mqtt" onclick="setTab('mqtt')">MQTT</button>
+    <button class="tab-btn" data-tab="device" onclick="setTab('device')">Cihaz</button>
+  </div>
+
+  <!-- Wi-Fi -->
+  <div class="pane active" id="pane-wifi">
+    <div class="note">Cihazın bağlanacağı ev ağını seçin.</div>
+    <div class="net-list" id="netList">
+      <div class="scanning">Ağlar taranıyor...</div>
+    </div>
+    <button class="btn btn-secondary" onclick="scanNetworks()">🔄 Yenile</button>
+    <div class="field">
+      <label for="wifiPass">Şifre</label>
+      <input type="password" id="wifiPass" placeholder="Açık ağ için boş bırakın" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" id="wifiSaveBtn" onclick="saveWifi()" disabled>Kaydet ve Bağlan</button>
+  </div>
+
+  <!-- MQTT -->
+  <div class="pane" id="pane-mqtt">
+    <div class="note">Uzaktan erişim için bulut MQTT sunucusu (TLS, genelde 8883). Sunucu boş bırakılıp kaydedilirse MQTT kullanılmaz. Kayıttan sonra cihaz yeniden başlar.</div>
+    <div class="field">
+      <label for="mqttHost">Sunucu</label>
+      <input type="text" id="mqttHost" placeholder="sunucu.emqxsl.com" autocapitalize="off" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label for="mqttPort">Port</label>
+      <input type="text" id="mqttPort" placeholder="8883" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="mqttUser">Kullanıcı adı</label>
+      <input type="text" id="mqttUser" autocapitalize="off" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label for="mqttPass">Şifre</label>
+      <input type="password" id="mqttPass" placeholder="Şifre" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" id="mqttSaveBtn" onclick="saveMqtt()" disabled>Kaydet ve Yeniden Başlat</button>
+  </div>
+
+  <!-- Cihaz -->
+  <div class="pane" id="pane-device">
+    <div class="note">
+      Ev ağına bağlanamadığında ESP32 kendi ağını yayınlar. Feeder bu ağa bağlanarak <b>feeder.local</b> üzerinden erişilebilir olur.
+      ESP32 her iki ağda da <b>panel.local</b> adıyla bulunur.
+    </div>
+    <div class="field">
+      <label for="apSSID">AP yayın adı (SSID)</label>
+      <input type="text" id="apSSID" maxlength="32" placeholder="Örn: ESP32-Panel" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="apPass">AP şifre (en az 8 karakter, boşsa şifresiz)</label>
+      <input type="password" id="apPass" maxlength="64" placeholder="Şifre" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="apIP">AP IP adresi</label>
+      <input type="text" id="apIP" maxlength="15" placeholder="192.168.4.1" inputmode="decimal" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" id="saveApBtn" onclick="saveAp()" disabled>Kaydet ve Yeniden Başlat</button>
+
+    <div class="label">Kayıtlar</div>
+    <button class="btn btn-secondary" onclick="getLogs()">Log Kayıtları</button>
+    <button class="btn btn-danger" onclick="clearLogs()">Logları Temizle</button>
+  </div>
+
+  <div class="msg" id="msg"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
